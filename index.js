@@ -9,71 +9,65 @@ Modified :
 
 // When DOM is ready
 $(function() {
-	// Add any other global variables you may need here.
-	var move_count = 0;
-	var tile_size = $(".puzzle-row").width()/4;
 
-	// // Randomly determine on the image
-	// var img = new Image();
-	// var img_no = Math.floor(Math.random()*5);
-	// console.log(img_no);
-	// switch(img_no){
-	// 	case 0:
-	// 		img.src = "img/lovelive.jpg";
-	// 		break;
-	// 	case 1:
-	// 		img.src = "img/dog.jpg";
-	// 		break;
-	// 	case 2:
-	// 		img.src = "img/hamster.jpg";
-	// 		break;
-	// 	case 3: 
-	// 		img.src = "img/cat.jpg";
-	// 		break;
-	// 	case 4:
-	// 		img.src = "img/panda.jpg";
-	// 		break;
-	// }
+	initialize();
 
-	// Create tile array 
-	// Draw the image on tiles
-	var tile = [];
-	for (i=0;i<15;i++) {
-		tile[i] = $('#tile'+i)[0];
-		tile_row = parseInt($('#tile'+i).attr('tile-row'));
-		tile_col = parseInt($('#tile'+i).attr('tile-col'));
-		drawImg(tile[i], tile_row, tile_col);
-	}
-	// Draw image on the empty tile
-	tile[16] = $('#emptytile')[0];
-	drawImg(tile[16], 3, 3);
+	// If a tile is clicked, call tileClicked
+	$(document).on("click", ".tile", tileClicked);
 
+	// If the reset button is clicked, call shuffleTiles
+	$(document).on("click", "#reset", restart);
+
+	// If a key is pressed, call keyboardControl
+	$(document).keydown(keyboardControl);
+
+	// If a level is choosed, restart the game
+	$('.level-choice').click(function() {
+		$(this).addClass('level-active');
+		$(this).siblings().removeClass('level-active');
+	});
 
 	// If the size of the browser window changes, resize the game area
 	$(window).resize(function(){
 		var new_window_width = $(window).width();
 		var new_window_height = $(window).height();
 		var new_tile_width = new_window_width*0.13;
+		if (new_tile_width > 120) {
+			new_tile_width = 120;
+		}
+		if (new_tile_width < 60) {
+			new_tile_width = 60;
+		}
 		$(".tile").height(new_tile_width).width(new_tile_width);
 		$(".puzzle-row").height(new_tile_width);
 	});
 
+	/**
+	* Initialize the game
+	* @return undefined
+	*/
+	function initialize() {
+		// Add any other global variables you may need here.
+		var move_count = 0;
+		var tile_size = $(".puzzle-row").width()/4;
 
+		// Create tile array 
+		// Draw the image on tiles
+		var tile = [];
+		for (i=0;i<15;i++) {
+			tile[i] = $('#tile'+i)[0];
+			tile_row = parseInt($('#tile'+i).attr('tile-row'));
+			tile_col = parseInt($('#tile'+i).attr('tile-col'));
+			drawImg(tile_size, tile[i], tile_row, tile_col);
+		}
+		// Draw image on the empty tile
+		tile[16] = $('#emptytile')[0];
+		drawImg(tile_size, tile[16], 3, 3);
 
-	shuffleTiles();
+		shuffleTiles();
 
-	checkSolved(true);
-
-	// If a tile is clicked, call tileClicked
-	$(document).on("click", ".tile", tileClicked);
-
-	// If the reset button is clicked, call shuffleTiles
-	$(document).on("click", "#reset", shuffleTiles);
-
-	// If a key is pressed, call keyboardControl
-	$(document).keydown(keyboardControl);
-
-
+		checkSolved(true);		
+	}
 
 	/**
 	 * Draw image on the tiles.
@@ -82,7 +76,7 @@ $(function() {
 	 * @param{int}: tile_canvas_col  the column number of the tile
 	 * @return undefined
 	 */
-	function drawImg(tile_canvas, tile_canvas_row, tile_canvas_col){
+	function drawImg(tile_size, tile_canvas, tile_canvas_row, tile_canvas_col){
 		tile_canvas.width = tile_size;
 		tile_canvas.height = tile_size;
 		var tile_context = tile_canvas.getContext("2d");
@@ -91,7 +85,6 @@ $(function() {
 			tile_context.drawImage(img, tile_canvas_col*tile_size, tile_canvas_row*tile_size, tile_size, tile_size, 0, 0, tile_size, tile_size);
 		}
 		img.src= "img/panda.jpg";
-		//console.log(img.src);
 	}
 
 
@@ -117,10 +110,6 @@ $(function() {
 			// Find the empty tile
 			var emptytileRow = parseInt($('#emptytile').attr('tile-row'));
 			var emptytileCol = parseInt($('#emptytile').attr('tile-col'));
-
-			// console.log(tileClicked);
-			// console.log("clicked: "+tileClickedRow+", "+tileClickedCol);
-			// console.log("empty: "+emptytileRow+", "+emptytileCol);
 
 			moveTile(tileClicked,tileClickedRow, tileClickedCol, emptytileRow, emptytileCol, true);
 			
@@ -194,8 +183,35 @@ $(function() {
 			move_count += 1;
 			updateMoveCount(move_count);
 		}
-	}
+	};
 
+	/**
+	 * Restart the game
+	 * @return undefined
+	 */
+	function restart() {
+		solveGame();
+		shuffleTiles();
+	};
+
+	/**
+	 * Return the game state to solved 
+	 * @return undefined
+	 */
+	function solveGame() {
+		for (i = 0; i < 4; i++) { // row
+			for (j = 0; j < 4; j++) { // col
+				// Remove style
+				$('[tile-row="'+i+'"][tile-col="'+j+'"]').css("right", "").css("left", "").css("top", "").css("down", "");
+			}
+		}
+		for (i = 0; i < 4; i++) { // row
+			for (j = 0; j < 4; j++) { // col
+				// Mark the correct position
+				$('.puzzle-row-'+i).children().eq(j).attr('tile-row', i).attr('tile-col', j);
+			}
+		}
+	};
 
 
 	/**
@@ -205,8 +221,6 @@ $(function() {
 	function updateMoveCount(move_count){
 		$('#move_count').html(move_count);
 	}
-
-
 
 	/**
 	 * Shuffle up the tiles 
@@ -221,14 +235,14 @@ $(function() {
 
 		var dir = 0;
 
-		// Move the empty tiles 300 times
-		for (i = 0; i < 10; i++){
+		// Move the empty tiles n times depending on the difficulty level, default is easy
+		n = getLevel();
+		for (i = 0; i < n; i++){
 			var emptytileRow = parseInt($('#emptytile').attr('tile-row'));
 			var emptytileCol = parseInt($('#emptytile').attr('tile-col'));
 
 			// dir can be 0(up), 1(down), 2(left), 3(right)
 			dir = Math.floor(Math.random()*4);
-			//console.log(dir);
 
 			// Emptytile will ...
 			// Swap with the neighbor tile above
@@ -236,9 +250,6 @@ $(function() {
 				tile1Row = emptytileRow - 1;
 				tile1Col = emptytileCol; 
 				tile1id = $('[tile-row="'+tile1Row+'"][tile-col="'+tile1Col+'"]').attr('id');
-				// console.log("tile1Row: "+tile1Row);	
-				// console.log("tile1Col: "+tile1Col);
-				// console.log("tile1id: "+tile1id);
 				moveTile(tile1id, tile1Row, tile1Col, emptytileRow, emptytileCol, false);
 			}
 
@@ -328,6 +339,21 @@ $(function() {
 	 }
 
 
+	/**
+	 * Get difficulty level
+	 * @return 10 (easy), 50 (medium) or 200 (hard)
+	 */
+	 function getLevel() {
+	 	var level = $('.level-active').attr('level');
+	 	switch(level) {
+	 		case 'easy':
+	 			return 10;
+	 		case 'medium':
+	 			return 50;
+	 		case 'hard':
+	 			return 200;
+	 	}
+	 }	
 
 	/**
 	 * Add support for keyboard control (up, down, left and right arrow key)
@@ -338,7 +364,6 @@ $(function() {
 
 		var keyCode = e.which;
 		var arrow = {up: 38, down: 40, left:37, right:39};
-		//console.log(keyCode);
 
 		// if the key pressed are one of the up/down/left/right keys
 		if (keyCode == 38 || keyCode == 40 || keyCode == 37 || keyCode == 39) {
@@ -399,26 +424,23 @@ $(function() {
 }); // end of DOM ready
 
 
-
-
-// /**
-//  * When the page loads, create our puzzle
-//  */
-// window.onload = function () {
-//   // generate parameters for a random puzzle
-//   // create the tiles
-//   // shuffle the tiles
-// }
-
-// }
-
-	// /**
-	//  * Creates all the tiles necessary.
-	//  * @return undefined
-	//  */
-	// function createTiles(){
-	// 	// figure out what tile specific information you need to add
-	// 	// can add all of the tiles here dynamically (which is useful if you are going to make the number of rows and columns adjustable, however you can also just specify them fixed in the HTML)
+	// // Randomly determine on the image
+	// var img = new Image();
+	// var img_no = Math.floor(Math.random()*5);
+	// switch(img_no){
+	// 	case 0:
+	// 		img.src = "img/lovelive.jpg";
+	// 		break;
+	// 	case 1:
+	// 		img.src = "img/dog.jpg";
+	// 		break;
+	// 	case 2:
+	// 		img.src = "img/hamster.jpg";
+	// 		break;
+	// 	case 3: 
+	// 		img.src = "img/cat.jpg";
+	// 		break;
+	// 	case 4:
+	// 		img.src = "img/panda.jpg";
+	// 		break;
 	// }
-
-

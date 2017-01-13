@@ -2,7 +2,7 @@
 <html>
     <head>
     	<link rel="stylesheet" href="index.css">
-		<link href="https://fonts.googleapis.com/css?family=Raleway|Baloo+Bhai" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600,700,800|Baloo+Bhai" rel="stylesheet">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <title>Sliding Puzzle Game</title>
     </head>
@@ -13,35 +13,44 @@
         	<div class="inner">
         		<div class="intro">
         			<h3 class="welcome">Sliding Puzzle Game</h3>
-        			<p class="explanation">Click a tile to swap it with the empty square. 
-        			<p class="explanation">Try to finish the puzzle with fewest moves! 
-        			<p class="explanation">Click the RESET button when you get stuck.
+        			<p class="explanation">Click a tile to swap it with the empty square.</p>
+        			<p class="explanation">Try to finish the puzzle with fewest moves!</p>
+        			<p class="explanation">Click the RESTART button when you get stuck.</p>
+        		</div>
+
+        		<div class="level-container">
+        			<p class="level-title">Difficulty Level: </p>
+        			<div class="level-choice-container">
+    				<div class="level-choice level-active" level="easy">Easy</div>
+    				<div class="level-choice" level="medium">Medium</div>
+    				<div class="level-choice" level="hard">Hard</div>
+    				</div>
         		</div>
 
 	        	<div class="game">
 	        		<div class="puzzle">
-	        			<div class="puzzle-row">
+	        			<div class="puzzle-row puzzle-row-0">
 	        				<canvas class="tile" id="tile0" tile-row="0" tile-col="0"></canvas>
 	        				<canvas class="tile" id="tile1" tile-row="0" tile-col="1"></canvas>
 	        				<canvas class="tile" id="tile2" tile-row="0" tile-col="2"></canvas>
 	        				<canvas class="tile" id="tile3" tile-row="0" tile-col="3"></canvas>
 	        			</div>
 
-	        			<div class="puzzle-row">
+	        			<div class="puzzle-row puzzle-row-1">
 	        				<canvas class="tile" id="tile4" tile-row="1" tile-col="0"></canvas>
 	        				<canvas class="tile" id="tile5" tile-row="1" tile-col="1"></canvas>
 	        				<canvas class="tile" id="tile6" tile-row="1" tile-col="2"></canvas>
 	        				<canvas class="tile" id="tile7" tile-row="1" tile-col="3"></canvas>
 	        			</div>
 
-	        			<div class="puzzle-row">
+	        			<div class="puzzle-row puzzle-row-2">
 	        				<canvas class="tile" id="tile8" tile-row="2" tile-col="0"></canvas>
 	        				<canvas class="tile" id="tile9" tile-row="2" tile-col="1"></canvas>
 	        				<canvas class="tile" id="tile10" tile-row="2" tile-col="2"></canvas>
 	        				<canvas class="tile" id="tile11" tile-row="2" tile-col="3"></canvas>
 	        			</div>
 
-	        			<div class="puzzle-row">
+	        			<div class="puzzle-row puzzle-row-3">
 	        				<canvas class="tile" id="tile12" tile-row="3" tile-col="0"></canvas>
 	        				<canvas class="tile" id="tile13" tile-row="3" tile-col="1"></canvas>
 	        				<canvas class="tile" id="tile14" tile-row="3" tile-col="2"></canvas>
@@ -51,10 +60,10 @@
 
 	        		<div class="puzzledata">
 	        			<div class="reset_container">
-	        				<span id="reset">RESET</span>
+	        				<div id="reset">RESTART</div>
 	        			</div>
 	        			<div class="move_container">
-	        				MOVES: 
+	        				<span>MOVES: </span>
 	        				<span id="move_count">0</span>
 	        			</div>
 	        		</div>

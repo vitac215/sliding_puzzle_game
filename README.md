@@ -3,7 +3,7 @@
 A sliding puzzle game written in javascript.
 
 ## Installation
-It can also be accessed on [GitHub page](https://vitac215.github.io/sliding_puzzle_game/A1.html).
+It can also be accessed on [GitHub page](https://vitac215.github.io/sliding_puzzle_game/index.html).
 
 ## Basic Usage
 * <b>Move Tile</b>
