@@ -324,8 +324,10 @@ $(function() {
 	 		}
 	 	}
 
+	 	// If the puzzle happen to be solved when initialized, reshuffle
 	 	if (solved == 1 && move_count == 0) {
 	 		shuffleTiles();
+	 		return;
 	 	}
 
 	 	if (recheck==false && solved == 1) {
