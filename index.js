@@ -25,6 +25,7 @@ $(function() {
 	$('.level-choice').click(function() {
 		$(this).addClass('level-active');
 		$(this).siblings().removeClass('level-active');
+		restart();
 	});
 
 	// If the size of the browser window changes, resize the game area
