@@ -13,5 +13,4 @@ It can also be accessed on [GitHub page](https://vitac215.github.io/sliding_puzz
    * You can reset a game by clicking on the RESET button.
 
 ## TODO
-* Add difficulty level choices
 * Allow uploading a photo
