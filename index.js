@@ -325,7 +325,7 @@ $(function() {
 	 	}
 
 	 	if (recheck==false && solved == 1){
-	 		alert("You win! Your used "+move_count+" moves!");
+	 		move_count == 1 ? alert("You win! Your used "+move_count+" move!") : alert("You win! Your used "+move_count+" moves!");
 	 		// Set move to 0
 			move_count = 0;
 			updateMoveCount(move_count);
