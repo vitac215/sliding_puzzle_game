@@ -236,7 +236,7 @@ $(function() {
 
 		var dir = 0;
 
-		// Move the empty tiles n times depending on the difficulty level, default is easy
+		// Move the empty tiles n times depending on the difficulty level, default is medium
 		n = getLevel();
 		for (i = 0; i < n; i++){
 			var emptytileRow = parseInt($('#emptytile').attr('tile-row'));
