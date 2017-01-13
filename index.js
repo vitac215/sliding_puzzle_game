@@ -289,7 +289,7 @@ $(function() {
 	/**
 	 * Check if the puzzle is solved
 	 * @param{boolean} recheck  true if this check is before the move, false if not
-	 * @return{int} 0 if the puzzle is solved, 1 if the puzzle is unsolved, 3 if the puzzle is already solved (end of game)
+	 * @return{int} 0 if the puzzle is unsolved, 1 if the puzzle is solved, 3 if the puzzle is already solved (end of game)
 	 */
 	 function checkSolved(recheck) {
 	 	// 0 = unsolved, 1 = solved, 2 = already done
@@ -324,14 +324,19 @@ $(function() {
 	 		}
 	 	}
 
-	 	if (recheck==false && solved == 1){
+	 	if (solved == 1 && move_count == 0) {
+	 		shuffleTiles();
+	 	}
+
+	 	if (recheck==false && solved == 1) {
 	 		move_count == 1 ? alert("You win! Your used "+move_count+" move!") : alert("You win! Your used "+move_count+" moves!");
 	 		// Set move to 0
 			move_count = 0;
 			updateMoveCount(move_count);
 			$("#emptytile").fadeIn(2500);
 	 	}
-	 	if (recheck==true && solved == 1){
+	 	// If the user tries to move after solving the game
+	 	if (recheck==true && solved == 1) {
 	 		solved = 3;
 	 		alert ("You already solved the puzzle!");
 	 		$("#emptytile").fadeIn(2500);
